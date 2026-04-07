@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Insurance Data Availability Report</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #1a1a2e;
+    --navy-light: #16213e;
+    --blue: #4361ee;
+    --blue-light: #eef1ff;
+    --green: #06d6a0;
+    --green-bg: #e6faf4;
+    --amber: #ffd166;
+    --amber-bg: #fff8e6;
+    --red: #ef476f;
+    --red-bg: #fde8ed;
+    --gray-50: #f8f9fc;
+    --gray-100: #f1f3f8;
+    --gray-200: #e2e6ef;
+    --gray-300: #cdd3e0;
+    --gray-500: #6b7894;
+    --gray-700: #3d4663;
+    --gray-900: #1a1d2e;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+    --shadow-md: 0 4px 12px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,.08), 0 4px 8px rgba(0,0,0,.04);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--gray-50);
+    color: var(--gray-900);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Header */
+  .header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 60%, #0f3460 100%);
+    color: #fff;
+    padding: 48px 0 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(67,97,238,.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .header .container { position: relative; z-index: 1; }
+  .header h1 { font-size: 28px; font-weight: 700; letter-spacing: -.5px; margin-bottom: 6px; }
+  .header p { color: rgba(255,255,255,.65); font-size: 15px; font-weight: 400; }
+  .header .badge {
+    display: inline-block;
+    background: rgba(67,97,238,.25);
+    border: 1px solid rgba(67,97,238,.4);
+    color: #a3b8ff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    letter-spacing: .3px;
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+  /* Section */
+  .section { margin: 40px 0; }
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+    letter-spacing: -.3px;
+  }
+  .section-subtitle {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 24px;
+  }
+  .section-divider {
+    width: 40px;
+    height: 3px;
+    background: var(--blue);
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+
+  /* Metric Cards */
+  .metrics-row {
+    display: grid;
+    gap: 16px;
+  }
+  .metrics-row.three { grid-template-columns: repeat(3, 1fr); }
+  .metrics-row.six { grid-template-columns: repeat(3, 1fr); }
+  @media (min-width: 900px) { .metrics-row.six { grid-template-columns: repeat(6, 1fr); } }
+
+  .metric-card {
+    background: #fff;
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    transition: box-shadow .2s;
+  }
+  .metric-card:hover { box-shadow: var(--shadow-md); }
+  .metric-card .label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 8px;
+  }
+  .metric-card .value {
+    font-size: 30px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -.5px;
+    line-height: 1.1;
+  }
+  .metric-card .sub {
+    font-size: 13px;
+    color: var(--gray-500);
+    margin-top: 4px;
+  }
+  .metric-card.large .value { font-size: 36px; }
+
+  .metric-card.small { padding: 18px; }
+  .metric-card.small .value { font-size: 22px; }
+  .metric-card.small .pct {
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .pct-green { color: var(--green); }
+  .pct-amber { color: #e6a700; }
+  .pct-red { color: var(--red); }
+
+  .border-green { border-left: 4px solid var(--green); }
+  .border-amber { border-left: 4px solid var(--amber); }
+  .border-red { border-left: 4px solid var(--red); }
+  .border-blue { border-left: 4px solid var(--blue); }
+
+  .note-box {
+    background: var(--blue-light);
+    border: 1px solid #d0d9ff;
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    font-size: 13px;
+    color: var(--gray-700);
+    line-height: 1.65;
+    margin-top: 20px;
+  }
+  .note-box strong { color: var(--gray-900); }
+
+  /* Tables */
+  .table-wrapper {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    background: var(--gray-100);
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: var(--gray-500);
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--gray-200);
+    white-space: nowrap;
+  }
+  td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--gray-100);
+    white-space: nowrap;
+  }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  th.num { text-align: right; }
+  tbody tr:nth-child(even) { background: var(--gray-50); }
+  tbody tr:hover { background: #eef1ff; }
+  tbody tr.row-warning { background: var(--red-bg); }
+  tbody tr.row-warning:hover { background: #fad0da; }
+  tbody tr.row-total {
+    background: var(--gray-100);
+    font-weight: 800;
+    border-top: 2px solid var(--gray-300);
+  }
+  tbody tr.row-total td { padding: 13px 16px; }
+
+  /* Checkmark cards */
+  .check-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+  }
+  .check-card {
+    background: var(--green-bg);
+    border: 1px solid #b0ead9;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .check-icon {
+    width: 22px;
+    height: 22px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .check-icon svg { width: 13px; height: 13px; }
+  .check-card .text { font-size: 13px; color: var(--gray-700); line-height: 1.4; }
+  .check-card .text strong { color: var(--gray-900); display: block; font-size: 13px; }
+
+  /* Progress bars */
+  .progress-wrap {
+    width: 100%;
+    max-width: 120px;
+    height: 8px;
+    background: var(--gray-200);
+    border-radius: 8px;
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .progress-bar {
+    height: 100%;
+    border-radius: 8px;
+    transition: width .3s;
+  }
+  .bg-green { background: var(--green); }
+  .bg-amber { background: var(--amber); }
+  .bg-red { background: var(--red); }
+
+  .quality-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: .3px;
+  }
+  .quality-high { background: var(--green-bg); color: #059076; }
+  .quality-medium { background: var(--amber-bg); color: #a67c00; }
+  .quality-none { background: var(--red-bg); color: #c0365a; }
+
+  /* Bar chart */
+  .bar-chart { list-style: none; }
+  .bar-chart li {
+    display: grid;
+    grid-template-columns: 200px 1fr 90px;
+    align-items: center;
+    gap: 14px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--gray-100);
+    font-size: 13px;
+  }
+  .bar-chart li:last-child { border-bottom: none; }
+  .bar-chart .bar-label {
+    font-weight: 600;
+    color: var(--gray-700);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .bar-chart .bar-track {
+    height: 24px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .bar-chart .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), #6c8cff);
+    border-radius: 6px;
+    min-width: 2px;
+  }
+  .bar-chart .bar-value {
+    text-align: right;
+    font-weight: 700;
+    color: var(--gray-900);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Demographic cards */
+  .demo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+  }
+  .demo-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    padding: 24px;
+  }
+  .demo-card h4 {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 16px;
+  }
+  .demo-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .demo-row .demo-label {
+    width: 120px;
+    font-size: 13px;
+    color: var(--gray-700);
+    flex-shrink: 0;
+  }
+  .demo-row .demo-bar {
+    flex: 1;
+    height: 22px;
+    background: var(--gray-100);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .demo-row .demo-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), #6c8cff);
+    border-radius: 6px;
+  }
+  .demo-row .demo-pct {
+    width: 44px;
+    text-align: right;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+
+  /* Takeaway cards */
+  .takeaway-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+  }
+  .takeaway-card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    padding: 20px 22px;
+    display: flex;
+    gap: 14px;
+  }
+  .takeaway-num {
+    width: 32px;
+    height: 32px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .takeaway-card .text { font-size: 13px; color: var(--gray-700); line-height: 1.6; }
+  .takeaway-card .text strong { color: var(--gray-900); }
+
+  /* Subsection */
+  .subsection-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 48px;
+    padding: 24px 0;
+    border-top: 1px solid var(--gray-200);
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray-500);
+    padding-bottom: 48px;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; }
+    .header { padding: 24px 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section { margin: 24px 0; page-break-inside: avoid; }
+    .metric-card, .table-wrapper, .demo-card, .takeaway-card { box-shadow: none; border: 1px solid #ddd; }
+    .container { max-width: 100%; padding: 0 16px; }
+    .metrics-row.six { grid-template-columns: repeat(3, 1fr); }
+    tbody tr:nth-child(even) { background: #f5f5f5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    tbody tr.row-warning { background: #fde8ed !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  @media (max-width: 768px) {
+    .metrics-row.three { grid-template-columns: 1fr; }
+    .metrics-row.six { grid-template-columns: repeat(2, 1fr); }
+    .bar-chart li { grid-template-columns: 130px 1fr 70px; }
+    .takeaway-grid { grid-template-columns: 1fr; }
+    .header h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="container">
+    <div class="badge">DATA AVAILABILITY REPORT</div>
+    <h1>Insurance Data Enrichment Dashboard</h1>
+    <p>Supabase (system of record) + AL3 / Snowflake (enrichment layer)</p>
+  </div>
+</div>
+
+<!-- SECTION 1: EXECUTIVE SUMMARY -->
+<div class="container">
+  <div class="section">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Executive Summary</h2>
+    <p class="section-subtitle">Active portfolio overview and data enrichment coverage</p>
+
+    <!-- Big 3 -->
+    <div class="metrics-row three" style="margin-bottom:16px">
+      <div class="metric-card large border-blue">
+        <div class="label">Active Agencies</div>
+        <div class="value">24</div>
+        <div class="sub">Unique agencies in Supabase</div>
+      </div>
+      <div class="metric-card large border-blue">
+        <div class="label">Active Customers</div>
+        <div class="value">28,107</div>
+        <div class="sub">Distinct customer records</div>
+      </div>
+      <div class="metric-card large border-blue">
+        <div class="label">Active Policies</div>
+        <div class="value">49,217</div>
+        <div class="sub">Policies currently in force</div>
+      </div>
+    </div>
+
+    <!-- 6 enrichment metrics -->
+    <div class="metrics-row six">
+      <div class="metric-card small border-blue">
+        <div class="label">AL3 Coverage</div>
+        <div class="value">33,957</div>
+        <div class="pct pct-green">69.0%</div>
+        <div class="sub">Actual matched policies</div>
+      </div>
+      <div class="metric-card small border-green">
+        <div class="label">Renewal Date</div>
+        <div class="value">49,217</div>
+        <div class="pct pct-green">100%</div>
+        <div class="sub">From Supabase</div>
+      </div>
+      <div class="metric-card small border-amber">
+        <div class="label">DOB</div>
+        <div class="value">10,502</div>
+        <div class="pct pct-amber">21.3%</div>
+        <div class="sub">From AL3</div>
+      </div>
+      <div class="metric-card small border-amber">
+        <div class="label">Marital Status</div>
+        <div class="value">9,158</div>
+        <div class="pct pct-amber">18.6%</div>
+        <div class="sub">From AL3</div>
+      </div>
+      <div class="metric-card small border-amber">
+        <div class="label">Original Inception Date</div>
+        <div class="value">28,418</div>
+        <div class="pct pct-amber">57.7%</div>
+        <div class="sub">From AL3</div>
+      </div>
+      <div class="metric-card small border-amber">
+        <div class="label">Gender</div>
+        <div class="value">9,931</div>
+        <div class="pct pct-amber">20.2%</div>
+        <div class="sub">From AL3</div>
+      </div>
+    </div>
+
+    <div class="note-box">
+      <strong>Note:</strong> Renewal Date and First Policy Effective Date are available at 100% from Supabase. AL3 enrichment adds demographic data (DOB, gender, marital status) primarily for auto policies where driver information is required. Numbers are based on actual policy-number-level matching between Supabase active policies and Snowflake AL3 records.
+    </div>
+  </div>
+
+  <!-- SECTION 2: AGENCY BREAKDOWN -->
+  <div class="section">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Agency Breakdown</h2>
+    <p class="section-subtitle">AL3 enrichment coverage by agency &mdash; sorted by active policies</p>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Agency</th>
+            <th class="num">Active Customers</th>
+            <th class="num">Active Policies</th>
+            <th class="num">AL3 Match</th>
+            <th class="num">AL3 %</th>
+            <th class="num">DOB</th>
+            <th class="num">Marital</th>
+            <th class="num">Inception</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Perfect Policy Insurance</td>
+            <td class="num">4,567</td><td class="num">8,046</td><td class="num">4,940</td><td class="num">71.9%</td><td class="num">1,260</td><td class="num">1,141</td><td class="num">3,390</td>
+          </tr>
+          <tr>
+            <td>Nadler Insurance</td>
+            <td class="num">2,666</td><td class="num">5,349</td><td class="num">3,530</td><td class="num">74.6%</td><td class="num">765</td><td class="num">683</td><td class="num">3,134</td>
+          </tr>
+          <tr>
+            <td>S &amp; G Mitchell</td>
+            <td class="num">3,145</td><td class="num">5,142</td><td class="num">3,743</td><td class="num">85.0%</td><td class="num">1,636</td><td class="num">1,570</td><td class="num">3,669</td>
+          </tr>
+          <tr>
+            <td>Lords Insurance</td>
+            <td class="num">2,264</td><td class="num">4,356</td><td class="num">2,498</td><td class="num">67.8%</td><td class="num">627</td><td class="num">606</td><td class="num">2,289</td>
+          </tr>
+          <tr>
+            <td>Marenco Insurance</td>
+            <td class="num">1,802</td><td class="num">3,479</td><td class="num">2,727</td><td class="num">87.2%</td><td class="num">902</td><td class="num">766</td><td class="num">2,363</td>
+          </tr>
+          <tr>
+            <td>UNO Insurance</td>
+            <td class="num">2,030</td><td class="num">2,857</td><td class="num">1,889</td><td class="num">80.6%</td><td class="num">677</td><td class="num">653</td><td class="num">1,252</td>
+          </tr>
+          <tr>
+            <td>Automated Insurance</td>
+            <td class="num">1,251</td><td class="num">2,348</td><td class="num">2,067</td><td class="num">96.6%</td><td class="num">941</td><td class="num">368</td><td class="num">2,032</td>
+          </tr>
+          <tr>
+            <td>Leland Insurance</td>
+            <td class="num">1,102</td><td class="num">2,343</td><td class="num">1,581</td><td class="num">81.0%</td><td class="num">296</td><td class="num">282</td><td class="num">1,184</td>
+          </tr>
+          <tr>
+            <td>Haskell Brokerage</td>
+            <td class="num">1,310</td><td class="num">2,209</td><td class="num">1,561</td><td class="num">71.5%</td><td class="num">301</td><td class="num">154</td><td class="num">1,169</td>
+          </tr>
+          <tr>
+            <td>Ford Insurance</td>
+            <td class="num">972</td><td class="num">2,147</td><td class="num">1,481</td><td class="num">83.0%</td><td class="num">331</td><td class="num">327</td><td class="num">1,316</td>
+          </tr>
+          <tr>
+            <td>KT Insurance</td>
+            <td class="num">812</td><td class="num">1,544</td><td class="num">1,181</td><td class="num">88.3%</td><td class="num">395</td><td class="num">395</td><td class="num">1,137</td>
+          </tr>
+          <tr>
+            <td>United Assurance</td>
+            <td class="num">921</td><td class="num">1,501</td><td class="num">1,415</td><td class="num">94.6%</td><td class="num">306</td><td class="num">210</td><td class="num">883</td>
+          </tr>
+          <tr>
+            <td>Insurance Pro Agencies</td>
+            <td class="num">1,023</td><td class="num">1,416</td><td class="num">1,126</td><td class="num">82.1%</td><td class="num">214</td><td class="num">213</td><td class="num">948</td>
+          </tr>
+          <tr>
+            <td>Aduna Insurance</td>
+            <td class="num">1,118</td><td class="num">1,296</td><td class="num">1,122</td><td class="num">94.4%</td><td class="num">916</td><td class="num">916</td><td class="num">1,122</td>
+          </tr>
+          <tr>
+            <td>Sentinel Insurance</td>
+            <td class="num">652</td><td class="num">1,282</td><td class="num">809</td><td class="num">63.9%</td><td class="num">266</td><td class="num">257</td><td class="num">691</td>
+          </tr>
+          <tr>
+            <td>Pro Financial</td>
+            <td class="num">577</td><td class="num">1,046</td><td class="num">964</td><td class="num">94.0%</td><td class="num">253</td><td class="num">211</td><td class="num">855</td>
+          </tr>
+          <tr class="row-warning">
+            <td>Libertas Group</td>
+            <td class="num">653</td><td class="num">859</td><td class="num">322</td><td class="num" style="color:#e6a700;font-weight:700">38.4%</td><td class="num">48</td><td class="num">48</td><td class="num">149</td>
+          </tr>
+          <tr>
+            <td>Brook Insurance</td>
+            <td class="num">458</td><td class="num">720</td><td class="num">692</td><td class="num">97.3%</td><td class="num">225</td><td class="num">217</td><td class="num">564</td>
+          </tr>
+          <tr class="row-warning">
+            <td><strong>CIII Insurance</strong></td>
+            <td class="num">333</td><td class="num">705</td><td class="num">0</td><td class="num" style="color:var(--red);font-weight:700">0%</td><td class="num">0</td><td class="num">0</td><td class="num">0</td>
+          </tr>
+          <tr class="row-warning">
+            <td>MG Insurance</td>
+            <td class="num">328</td><td class="num">406</td><td class="num">181</td><td class="num" style="color:#e6a700;font-weight:700">45.5%</td><td class="num">109</td><td class="num">109</td><td class="num">164</td>
+          </tr>
+          <tr>
+            <td>Pathway Insurance</td>
+            <td class="num">45</td><td class="num">71</td><td class="num">62</td><td class="num">93.9%</td><td class="num">23</td><td class="num">23</td><td class="num">58</td>
+          </tr>
+          <tr class="row-warning">
+            <td>Robust Financial</td>
+            <td class="num">40</td><td class="num">42</td><td class="num">20</td><td class="num" style="color:#e6a700;font-weight:700">47.6%</td><td class="num">0</td><td class="num">0</td><td class="num">15</td>
+          </tr>
+          <tr>
+            <td>Core Path Pro Financial</td>
+            <td class="num">21</td><td class="num">33</td><td class="num">26</td><td class="num">83.9%</td><td class="num">8</td><td class="num">6</td><td class="num">17</td>
+          </tr>
+          <tr>
+            <td>Pipeline Insurance</td>
+            <td class="num">17</td><td class="num">20</td><td class="num">20</td><td class="num">100%</td><td class="num">3</td><td class="num">3</td><td class="num">17</td>
+          </tr>
+          <tr class="row-total">
+            <td>TOTALS</td>
+            <td class="num">28,107</td><td class="num">49,217</td><td class="num">33,957</td><td class="num">69.0%</td><td class="num">10,502</td><td class="num">9,158</td><td class="num">28,418</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 3: DATA FIELD AVAILABILITY -->
+  <div class="section">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Data Field Availability</h2>
+    <p class="section-subtitle">What data is available and where it comes from</p>
+
+    <!-- Supabase subsection -->
+    <h3 class="subsection-title" style="margin-bottom:14px">From Supabase <span style="font-weight:400;color:var(--gray-500);font-size:13px">&mdash; 100% Coverage (System of Record)</span></h3>
+    <div class="check-grid" style="margin-bottom:32px">
+      <div class="check-card">
+        <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="text"><strong>Renewal Date</strong>expiration_date &mdash; 49,217 / 49,217 (100%)</div>
+      </div>
+      <div class="check-card">
+        <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="text"><strong>First Policy Effective Date</strong>MIN(effective_date) per customer (100%)</div>
+      </div>
+      <div class="check-card">
+        <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="text"><strong>Policy Number</strong>Always populated (100%)</div>
+      </div>
+      <div class="check-card">
+        <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="text"><strong>Premium</strong>Always populated (100%)</div>
+      </div>
+      <div class="check-card">
+        <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="text"><strong>Carrier</strong>Always populated (100%)</div>
+      </div>
+      <div class="check-card">
+        <div class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="text"><strong>Effective Date</strong>Always populated (100%)</div>
+      </div>
+    </div>
+
+    <!-- AL3 subsection -->
+    <h3 class="subsection-title" style="margin-bottom:14px">From AL3 Enrichment <span style="font-weight:400;color:var(--gray-500);font-size:13px">&mdash; on 69% of policies that have AL3 matches</span></h3>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Field</th>
+            <th class="num">Matched Policies</th>
+            <th class="num" style="min-width:180px">% of Active</th>
+            <th>Coverage Quality</th>
+            <th>Marketing Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Address (City / State / ZIP)</td>
+            <td class="num">33,957</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-green" style="width:69%"></div></div> 69.0%
+            </td>
+            <td><span class="quality-badge quality-high">HIGH</span></td>
+            <td>Geo-targeting, local campaigns</td>
+          </tr>
+          <tr>
+            <td>Line of Business</td>
+            <td class="num">33,957</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-green" style="width:69%"></div></div> 69.0%
+            </td>
+            <td><span class="quality-badge quality-high">HIGH</span></td>
+            <td>Cross-sell identification</td>
+          </tr>
+          <tr>
+            <td>Original Inception Date</td>
+            <td class="num">28,418</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-amber" style="width:57.7%"></div></div> 57.7%
+            </td>
+            <td><span class="quality-badge quality-medium">MEDIUM</span></td>
+            <td>Customer tenure / loyalty</td>
+          </tr>
+          <tr>
+            <td>DOB</td>
+            <td class="num">10,502</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-amber" style="width:21.3%"></div></div> 21.3%
+            </td>
+            <td><span class="quality-badge quality-medium">MEDIUM</span></td>
+            <td>Age-based / life-stage marketing</td>
+          </tr>
+          <tr>
+            <td>Gender</td>
+            <td class="num">9,931</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-amber" style="width:20.2%"></div></div> 20.2%
+            </td>
+            <td><span class="quality-badge quality-medium">MEDIUM</span></td>
+            <td>Demographic targeting</td>
+          </tr>
+          <tr>
+            <td>Marital Status</td>
+            <td class="num">9,158</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-amber" style="width:18.6%"></div></div> 18.6%
+            </td>
+            <td><span class="quality-badge quality-medium">MEDIUM</span></td>
+            <td>Life-stage / household marketing</td>
+          </tr>
+          <tr>
+            <td>Home Year Built</td>
+            <td class="num">0</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-red" style="width:0%"></div></div> 0%
+            </td>
+            <td><span class="quality-badge quality-none">NONE</span></td>
+            <td>Not populated</td>
+          </tr>
+          <tr>
+            <td>Vehicle Details</td>
+            <td class="num">0</td>
+            <td class="num">
+              <div class="progress-wrap"><div class="progress-bar bg-red" style="width:0%"></div></div> 0%
+            </td>
+            <td><span class="quality-badge quality-none">NONE</span></td>
+            <td>Not populated</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- SECTION 4: LINES OF BUSINESS -->
+  <div class="section">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Lines of Business</h2>
+    <p class="section-subtitle">Full AL3 archive (all-time) &mdash; not limited to active policies</p>
+
+    <div style="background:#fff;border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--gray-200);padding:24px">
+      <ul class="bar-chart">
+        <li>
+          <span class="bar-label">Personal Auto (AUTOP)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+          <span class="bar-value">181,460</span>
+        </li>
+        <li>
+          <span class="bar-label">Homeowners (HOME)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:62.8%"></div></div>
+          <span class="bar-value">114,050</span>
+        </li>
+        <li>
+          <span class="bar-label">Business Auto (AUTOB)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:16.4%"></div></div>
+          <span class="bar-value">29,841</span>
+        </li>
+        <li>
+          <span class="bar-label">Dwelling Fire (DFIRE)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:10.9%"></div></div>
+          <span class="bar-value">19,834</span>
+        </li>
+        <li>
+          <span class="bar-label">Personal Umbrella (PUMBR)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:6.3%"></div></div>
+          <span class="bar-value">11,387</span>
+        </li>
+        <li>
+          <span class="bar-label">Business Owners (BOP)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:6.0%"></div></div>
+          <span class="bar-value">10,936</span>
+        </li>
+        <li>
+          <span class="bar-label">Workers Comp (WORK)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:5.6%"></div></div>
+          <span class="bar-value">10,251</span>
+        </li>
+        <li>
+          <span class="bar-label">Flood (FLOOD)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:4.3%"></div></div>
+          <span class="bar-value">7,756</span>
+        </li>
+        <li>
+          <span class="bar-label">Commercial Pkg (CPKGE)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:3.3%"></div></div>
+          <span class="bar-value">6,022</span>
+        </li>
+        <li>
+          <span class="bar-label">Boat (BOAT)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:1.8%"></div></div>
+          <span class="bar-value">3,257</span>
+        </li>
+        <li>
+          <span class="bar-label">Other (8 types)</span>
+          <div class="bar-track"><div class="bar-fill" style="width:2.8%"></div></div>
+          <span class="bar-value">5,011</span>
+        </li>
+      </ul>
+    </div>
+    <div class="note-box" style="margin-top:12px">These counts are from the full AL3 archive (all-time), not just active policies.</div>
+  </div>
+
+  <!-- SECTION 5: DEMOGRAPHIC SNAPSHOT -->
+  <div class="section">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Demographic Snapshot</h2>
+    <p class="section-subtitle">Distribution among AL3 records where demographic data is present</p>
+
+    <div class="demo-grid">
+      <div class="demo-card">
+        <h4>Gender <span style="font-weight:400;color:var(--gray-500);font-size:12px">(of records with data)</span></h4>
+        <div class="demo-row">
+          <span class="demo-label">Male</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:61%"></div></div>
+          <span class="demo-pct">61%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Female</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:39%"></div></div>
+          <span class="demo-pct">39%</span>
+        </div>
+      </div>
+
+      <div class="demo-card">
+        <h4>Marital Status <span style="font-weight:400;color:var(--gray-500);font-size:12px">(of records with data)</span></h4>
+        <div class="demo-row">
+          <span class="demo-label">Married</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:73%"></div></div>
+          <span class="demo-pct">73%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Single</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:24%"></div></div>
+          <span class="demo-pct">24%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Domestic Partner</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:1.4%"></div></div>
+          <span class="demo-pct">1.4%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Divorced</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:1.1%"></div></div>
+          <span class="demo-pct">1.1%</span>
+        </div>
+        <div class="demo-row">
+          <span class="demo-label">Widowed</span>
+          <div class="demo-bar"><div class="demo-fill" style="width:0.9%"></div></div>
+          <span class="demo-pct">0.9%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: KEY TAKEAWAYS -->
+  <div class="section">
+    <div class="section-divider"></div>
+    <h2 class="section-title">Key Takeaways</h2>
+    <p class="section-subtitle">Strategic insights for marketing data utilization</p>
+
+    <div class="takeaway-grid">
+      <div class="takeaway-card">
+        <div class="takeaway-num">1</div>
+        <div class="text"><strong>69% AL3 coverage</strong> &mdash; 33,957 of 49,217 active policies have matching AL3 records. 23 of 24 agencies have data; CIII Insurance (705 policies) has none.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="takeaway-num">2</div>
+        <div class="text"><strong>Renewal Date is 100%</strong> &mdash; Supabase expiration_date is always populated. No AL3 dependency.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="takeaway-num">3</div>
+        <div class="text"><strong>First Policy Date is 100%</strong> &mdash; Use Supabase MIN(effective_date) per customer. AL3's &ldquo;Original Inception Date&rdquo; (57.7%) supplements with carrier-side tenure.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="takeaway-num">4</div>
+        <div class="text"><strong>DOB / Gender / Marital at 18&ndash;21%</strong> &mdash; From AL3 driver records, primarily on auto policies. Home/commercial don't carry driver demographics.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="takeaway-num">5</div>
+        <div class="text"><strong>Cross-sell is the biggest opportunity</strong> &mdash; LOB data on all AL3 records lets you identify auto-only customers without home policies.</div>
+      </div>
+      <div class="takeaway-card">
+        <div class="takeaway-num">6</div>
+        <div class="text"><strong>Top-performing agencies for AL3 coverage</strong>: Pipeline (100%), Brook (97.3%), Automated (96.6%), Aduna (94.4%), United Assurance (94.6%). Weakest: Libertas (38.4%), MG (45.5%), Robust (47.6%).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    Report generated from Supabase (system of record) + Snowflake AL3 data (enrichment). Based on actual policy-number-level matching. April 6, 2026.
+  </div>
+</div>
+
+</body>
+</html>

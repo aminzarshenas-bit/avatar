@@ -1,9 +1,11 @@
 # Ignore everything
 *
 
-# Except the reports folder and its HTML files
-!reports/
-!reports/**/*.html
+# Except HTML report folders
+!covu-os-daily-digest/
+!covu-os-daily-digest/**/*.html
+!random/
+!random/**/*.html
 
 # And the gitignore itself
 !.gitignore
