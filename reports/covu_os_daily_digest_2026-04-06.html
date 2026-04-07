@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COVU OS Daily Digest — April 6, 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Nunito+Sans:wght@200;300;400;600;700;800;900&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #FFB703;
+    --primary-hover: #E0A100;
+    --navy: #1C2945;
+    --navy-text: #121A2B;
+    --navy-bg: #11426B;
+    --disabled: #B6BFD5;
+    --stroke: #D3DBEE;
+    --light-bg: #F1F3F9;
+    --yellow-light: #FFD15C;
+    --platinum: #E5E5E5;
+    --beau-blue: #B2CEDF;
+    --blue-green: #219EBC;
+    --success: #07D976;
+    --warning: #FF934F;
+    --error: #B00020;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--light-bg);
+    color: var(--navy-text);
+    font-family: 'Nunito Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 32px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .header {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 32px 40px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header-left { display: flex; align-items: center; gap: 16px; }
+  .header .logo {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 28px;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .header h1 {
+    font-family: 'Merriweather', serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: white;
+  }
+  .header .subtitle { color: var(--beau-blue); font-size: 14px; font-weight: 400; }
+  .header .date-badge {
+    display: inline-block;
+    background: var(--primary);
+    color: var(--navy);
+    padding: 6px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  /* Executive Summary */
+  .exec-summary {
+    background: white;
+    border-left: 4px solid var(--primary);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(28,41,69,0.06);
+  }
+  .exec-summary h2 {
+    font-family: 'Nunito Sans', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+  .exec-summary p { color: var(--navy-text); font-size: 14px; line-height: 1.8; }
+
+  /* Metric Cards */
+  .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 16px; margin-bottom: 24px; }
+  .metric-card {
+    background: white;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(28,41,69,0.06);
+    transition: box-shadow 0.2s;
+  }
+  .metric-card:hover { box-shadow: 0 4px 16px rgba(28,41,69,0.10); }
+  .metric-card .number { font-family: 'Nunito Sans', sans-serif; font-size: 34px; font-weight: 800; margin-bottom: 4px; color: var(--navy); }
+  .metric-card .label { font-size: 12px; color: var(--disabled); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700; }
+  .metric-card.primary .number { color: var(--primary); }
+  .metric-card.error .number { color: var(--error); }
+  .metric-card.warning .number { color: var(--warning); }
+  .metric-card.success .number { color: var(--success); }
+  .metric-card.blue-green .number { color: var(--blue-green); }
+  .metric-card.navy .number { color: var(--navy); }
+
+  /* Sections */
+  .section {
+    background: white;
+    border: 1px solid var(--stroke);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(28,41,69,0.06);
+  }
+  .section h2 {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section h3 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy-bg);
+    margin: 18px 0 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th {
+    text-align: left;
+    background: var(--navy);
+    color: white;
+    font-weight: 700;
+    padding: 10px 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--stroke); color: var(--navy-text); }
+  tr:nth-child(even) td { background: var(--light-bg); }
+  tr:last-child td { border-bottom: none; }
+
+  /* Badges */
+  .badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; }
+  .badge-error { background: rgba(176,0,32,0.1); color: var(--error); }
+  .badge-warning { background: rgba(255,147,79,0.12); color: var(--warning); }
+  .badge-success { background: rgba(7,217,118,0.12); color: #059b4e; }
+  .badge-blue { background: rgba(33,158,188,0.12); color: var(--blue-green); }
+  .badge-yellow { background: rgba(255,183,3,0.12); color: var(--primary-hover); }
+  .badge-muted { background: var(--light-bg); color: var(--disabled); }
+
+  /* Bar Charts */
+  .bar-chart { margin: 12px 0; }
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .bar-label { width: 200px; font-size: 12px; color: var(--navy-text); text-align: right; flex-shrink: 0; font-weight: 600; }
+  .bar-track { flex: 1; height: 24px; background: var(--light-bg); border-radius: 6px; overflow: hidden; border: 1px solid var(--stroke); }
+  .bar-fill { height: 100%; border-radius: 5px; display: flex; align-items: center; padding-left: 8px; font-size: 11px; font-weight: 700; color: white; min-width: 30px; }
+
+  /* Horizontal Histogram */
+  .histogram-container {
+    margin: 16px 0;
+    padding: 12px 0;
+  }
+  .histogram {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 200px;
+    padding: 0 8px;
+    border-bottom: 2px solid var(--navy);
+    border-left: 2px solid var(--navy);
+    position: relative;
+  }
+  .histogram .y-axis {
+    position: absolute;
+    left: -36px;
+    bottom: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: space-between;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--disabled);
+  }
+  .hist-bar-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+  }
+  .hist-bar {
+    width: 100%;
+    max-width: 56px;
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: white;
+    transition: opacity 0.2s;
+    min-height: 2px;
+  }
+  .hist-bar:hover { opacity: 0.85; }
+  .hist-bar.peak { background: var(--error) !important; }
+  .hist-bar.elevated { background: var(--warning) !important; }
+  .hist-label {
+    margin-top: 8px;
+    font-size: 10px;
+    color: var(--navy-text);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Issue Cards */
+  .issue-card { border: 1px solid var(--stroke); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; background: white; }
+  .issue-card.critical { border-left: 4px solid var(--error); background: rgba(176,0,32,0.02); }
+  .issue-card.moderate { border-left: 4px solid var(--warning); background: rgba(255,147,79,0.02); }
+  .issue-card .issue-title { font-weight: 700; font-size: 14px; color: var(--navy); margin-bottom: 6px; }
+  .issue-card .issue-detail { font-size: 13px; color: var(--navy-text); line-height: 1.7; }
+  .issue-card .issue-user { color: var(--blue-green); font-weight: 700; }
+
+  /* GitHub PR Cards */
+  .pr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+  @media (max-width: 768px) { .pr-grid { grid-template-columns: 1fr; } }
+  .pr-card { border: 1px solid var(--stroke); border-radius: 8px; padding: 12px 14px; background: white; }
+  .pr-card.merged { border-left: 4px solid var(--success); }
+  .pr-card.open { border-left: 4px solid var(--blue-green); }
+  .pr-card .pr-title { font-weight: 700; font-size: 13px; color: var(--navy); margin-bottom: 4px; }
+  .pr-card .pr-meta { font-size: 11px; color: var(--disabled); }
+  .pr-card .pr-meta strong { color: var(--navy-text); }
+
+  /* Layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } .metrics-grid { grid-template-columns: repeat(2, 1fr); } .header { flex-direction: column; gap: 12px; text-align: center; } }
+
+  /* Highlight */
+  .highlight { color: var(--primary-hover); font-weight: 800; }
+
+  /* Lists */
+  ul { padding-left: 20px; margin: 8px 0; }
+  li { font-size: 14px; margin-bottom: 8px; color: var(--navy-text); line-height: 1.7; }
+  li strong { color: var(--navy); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    color: var(--disabled);
+    font-size: 12px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--stroke);
+  }
+  .footer .covu { font-family: 'Nunito', sans-serif; font-weight: 800; text-transform: uppercase; color: var(--navy); }
+
+  /* Divider */
+  .section-divider { font-size: 11px; color: var(--disabled); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; }
+
+  /* Contributor avatars */
+  .contributor-row { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-top: 12px; }
+  .contributor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--light-bg);
+    border: 1px solid var(--stroke);
+    border-radius: 8px;
+    padding: 8px 14px;
+  }
+  .contributor .name { font-size: 13px; font-weight: 700; color: var(--navy); }
+  .contributor .stats { font-size: 11px; color: var(--disabled); }
+
+  /* Note category detail */
+  .note-detail { font-size: 12px; color: var(--disabled); margin-top: 4px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div>
+      <div class="logo">COVU</div>
+      <h1>OS Daily Digest</h1>
+      <div class="subtitle">Product & Engineering Activity Report</div>
+    </div>
+  </div>
+  <div class="date-badge">Monday, April 6, 2026</div>
+</div>
+
+<!-- Executive Summary -->
+<div class="exec-summary">
+  <h2>Executive Summary</h2>
+  <p>
+    <strong>1,840 services</strong> were created and <strong>10,020 tasks</strong> generated across the platform today.
+    <strong>2,192 tasks</strong> were completed successfully, while <strong>277 block events</strong> occurred across 242 unique tasks,
+    representing a <span class="highlight">2.4% block rate</span>. The dominant block pattern from agent notes was <strong>wrong agent/team assignment</strong> (64%),
+    including tasks routed to CL instead of PL teams, COIs delivered to wrong agents, and direct-billed policy tasks requiring no action.
+    On the support front, agents reported <strong>page auto-refresh disruptions</strong> (erasing email drafts mid-composition),
+    <strong>tasks disappearing post-triage</strong> during live calls, and <strong>unexpected availability status flips</strong>.
+    Engineering shipped <strong>7 merged PRs</strong> to covu-os (observability dashboards, Salesforce sync, playbook import hardening),
+    moved <strong>10 items in release 1.0.40</strong> to Ready for QA, and resolved 2 highest-priority bugs.
+    <strong>50 Jira issues</strong> were updated today across the OS project.
+  </p>
+</div>
+
+<!-- Key Metrics -->
+<div class="metrics-grid">
+  <div class="metric-card blue-green">
+    <div class="number">1,840</div>
+    <div class="label">Services Created</div>
+  </div>
+  <div class="metric-card navy">
+    <div class="number">10,020</div>
+    <div class="label">Tasks Generated</div>
+  </div>
+  <div class="metric-card success">
+    <div class="number">2,192</div>
+    <div class="label">Tasks Completed</div>
+  </div>
+  <div class="metric-card error">
+    <div class="number">277</div>
+    <div class="label">Block Events</div>
+  </div>
+  <div class="metric-card warning">
+    <div class="number">2.4%</div>
+    <div class="label">Block Rate</div>
+  </div>
+  <div class="metric-card primary">
+    <div class="number">50</div>
+    <div class="label">Jira Issues Updated</div>
+  </div>
+  <div class="metric-card navy">
+    <div class="number">7</div>
+    <div class="label">PRs Merged</div>
+  </div>
+</div>
+
+<!-- Blocked Tasks Analysis -->
+<div class="section">
+  <h2>Blocked Tasks Analysis</h2>
+  <p style="font-size:13px;color:var(--disabled);margin-bottom:16px;">277 block events across 242 unique tasks — breakdown by agent note categories:</p>
+
+  <div class="bar-chart">
+    <div class="bar-row">
+      <div class="bar-label">Misassigned Task</div>
+      <div class="bar-track"><div class="bar-fill" style="width:64%;background:var(--error);">178 (64%)</div></div>
+    </div>
+    <div class="note-detail" style="margin-left:212px;">Wrong agent/team (CL↔PL), COI delivery complete, direct-billed policies, reassignment to specific agents</div>
+
+    <div class="bar-row" style="margin-top:10px;">
+      <div class="bar-label">Misclassified Service</div>
+      <div class="bar-track"><div class="bar-fill" style="width:14%;background:var(--warning);">39 (14%)</div></div>
+    </div>
+    <div class="note-detail" style="margin-left:212px;">Wrong service type (endorsement↔billing, renewal↔cancellation), duplicates, reclassify requests</div>
+
+    <div class="bar-row" style="margin-top:10px;">
+      <div class="bar-label">System Issue</div>
+      <div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--primary);">35 (13%)</div></div>
+    </div>
+    <div class="note-detail" style="margin-left:212px;">Carrier portal access failures, UI unable to close/complete tasks, missing wait buttons, task merge requests</div>
+
+    <div class="bar-row" style="margin-top:10px;">
+      <div class="bar-label">Irrelevant Task</div>
+      <div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--blue-green);">16 (6%)</div></div>
+    </div>
+    <div class="note-detail" style="margin-left:212px;">Duplicate tasks, AI-generated tasks from emails that weren't needed, already-completed work</div>
+
+    <div class="bar-row" style="margin-top:10px;">
+      <div class="bar-label">Error in Prior Task</div>
+      <div class="bar-track"><div class="bar-fill" style="width:3%;background:var(--disabled);">9 (3%)</div></div>
+    </div>
+    <div class="note-detail" style="margin-left:212px;">Missing context from prior tasks, incorrect service types carried forward, duplicate task chains</div>
+  </div>
+
+  <h3>Hourly Block Distribution (Pacific Time)</h3>
+  <div class="histogram-container" style="padding-left: 40px;">
+    <div class="histogram">
+      <div class="y-axis">
+        <span>40</span>
+        <span>30</span>
+        <span>20</span>
+        <span>10</span>
+        <span>0</span>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:15%;background:var(--navy-bg);">6</div>
+        <div class="hist-label">5 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:32.5%;background:var(--navy-bg);">13</div>
+        <div class="hist-label">6 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:65%;background:var(--navy-bg);">26</div>
+        <div class="hist-label">7 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar peak" style="height:100%;">40</div>
+        <div class="hist-label">8 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:70%;background:var(--navy-bg);">28</div>
+        <div class="hist-label">9 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:75%;background:var(--navy-bg);">30</div>
+        <div class="hist-label">10 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:60%;background:var(--navy-bg);">24</div>
+        <div class="hist-label">11 AM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:80%;background:var(--navy-bg);">32</div>
+        <div class="hist-label">12 PM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar elevated" style="height:90%;">36</div>
+        <div class="hist-label">1 PM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:45%;background:var(--navy-bg);">18</div>
+        <div class="hist-label">2 PM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:40%;background:var(--navy-bg);">16</div>
+        <div class="hist-label">3 PM</div>
+      </div>
+      <div class="hist-bar-group">
+        <div class="hist-bar" style="height:20%;background:var(--navy-bg);">8</div>
+        <div class="hist-label">4 PM</div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:4px;font-size:10px;color:var(--disabled);font-weight:600;">
+      <span style="display:inline-block;width:10px;height:10px;background:var(--error);border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Peak (8 AM: 40 blocks)
+      &nbsp;&nbsp;
+      <span style="display:inline-block;width:10px;height:10px;background:var(--warning);border-radius:2px;margin-right:4px;vertical-align:middle;"></span>Elevated (1 PM: 36 blocks)
+    </div>
+  </div>
+</div>
+
+<!-- Support Issues from Slack -->
+<div class="section">
+  <h2>Support Channel Issues (#covu-os-support)</h2>
+  <p style="font-size:13px;color:var(--disabled);margin-bottom:16px;">18 messages today from agents reporting operational issues:</p>
+
+  <div class="issue-card critical">
+    <div class="issue-title">Page Auto-Refresh Erasing Work</div>
+    <div class="issue-detail">
+      <span class="issue-user">Jose Rodriguez</span> — Screen refreshes every ~20 seconds, erasing email drafts mid-composition. Unable to press "Complete" on tasks. Workaround: type in external doc and paste.<br>
+      <span class="issue-user">Tricia Malone</span> — Confirmed same issue: system refreshes while reading/typing emails and notes, requiring agents to re-find their work.
+    </div>
+  </div>
+
+  <div class="issue-card critical">
+    <div class="issue-title">Tasks Disappearing After Triage (Live Calls)</div>
+    <div class="issue-detail">
+      <span class="issue-user">Cheryl Tunay</span> — Completed triage for endorsement (SVC-20260406-53267), got error message, task vanished from queue while on the line with customer. Repeated on SVC-20260406-53356.<br>
+      <span class="issue-user">Aimee Harpole</span> — Same issue: triaged a mortgage company call, task disappeared with error message that vanished before she could capture it.<br>
+      <span class="issue-user">Jennifer Vasquez</span> — Mid-call, status flipped to unavailable and lost connection on SVC-20260406-52779.
+    </div>
+  </div>
+
+  <div class="issue-card moderate">
+    <div class="issue-title">Agent Availability Flipping to Offline/Unavailable</div>
+    <div class="issue-detail">
+      <span class="issue-user">Gail Moloney</span> — Status switched to unavailable mid-task (David Pierre car deal), lost the task she was working on. Engineering (Binay) investigated — setup looked correct, but status kept flipping back to OFFLINE.<br>
+      <span class="issue-user">Diep Nguyen</span> — No tasks coming through for 10+ minutes.
+    </div>
+  </div>
+
+  <div class="issue-card moderate">
+    <div class="issue-title">Task Failed on Decline / Missing Wait Button</div>
+    <div class="issue-detail">
+      <span class="issue-user">Donna Carlton</span> — Declined task (Phillips Bonding) to wait for carrier, got "task failed" error at bottom. Same happened on Peter Papakostas Pro Hauling and JCR Cleaning — 3 occurrences.
+    </div>
+  </div>
+
+  <div class="issue-card moderate">
+    <div class="issue-title">Unassigned Manual Override / Stuck Open Services</div>
+    <div class="issue-detail">
+      <span class="issue-user">Jose Fernandez + Kristen Garcia</span> — Found multiple services stuck in manual override with no assignee. Blank requests from dropped calls stuck in open status with no option to close. Related to bug OS-86 (fixed in 1.0.39.1). Agency-level "informational" items not appearing under account after completion.
+    </div>
+  </div>
+</div>
+
+<!-- Jira Activity -->
+<div class="section">
+  <h2>Jira Engineering Activity (OS Project)</h2>
+  <p style="font-size:13px;color:var(--disabled);margin-bottom:16px;">50 issues updated today — 12 bugs, 28 stories, 4 epics, 5 sub-tasks, 1 task</p>
+
+  <div class="two-col">
+    <div>
+      <h3>Release 1.0.40 — Ready for QA</h3>
+      <table>
+        <tr><th>Key</th><th>Summary</th><th>Assignee</th></tr>
+        <tr><td><span class="badge badge-success">OS-129</span></td><td>Rebuild DB objects (warning logs)</td><td>Alen H.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-103</span></td><td>Visibility logging: agent availability, call lifecycle</td><td>Binay B.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-81</span></td><td>Modify Triage Intake AI Agent requirements</td><td>Andrew E.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-68</span></td><td>Services not loading on list page <span class="badge badge-error">HIGH</span></td><td>Bibek K.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-60</span></td><td>Hide irrelevant services after close</td><td>Bibek K.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-57</span></td><td>Migrate Dashboard RPC to Supabase</td><td>Bibek K.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-33</span></td><td>Migrate SF data into OS</td><td>Alen H.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-8</span></td><td>Support Touch-Tone Entry for Calls</td><td>Binay B.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-93</span></td><td>[UI] Notes: download from SF S3 bucket</td><td>Alen H.</td></tr>
+        <tr><td><span class="badge badge-blue">OS-92</span></td><td>[UI] Email: download from SF S3 bucket</td><td>Alen H.</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Completed Today</h3>
+      <table>
+        <tr><th>Key</th><th>Summary</th><th>Priority</th></tr>
+        <tr><td><span class="badge badge-success">OS-86</span></td><td>Email AI Triage Reopening Follow-ups</td><td><span class="badge badge-error">Highest</span></td></tr>
+        <tr><td><span class="badge badge-success">OS-107</span></td><td>Agent OFFLINE after page refresh on call</td><td><span class="badge badge-error">Highest</span></td></tr>
+        <tr><td><span class="badge badge-success">OS-76</span></td><td>Dashboard points to main replica</td><td><span class="badge badge-muted">Medium</span></td></tr>
+        <tr><td><span class="badge badge-success">OS-26</span></td><td>Agent shows busy when not on call</td><td><span class="badge badge-muted">Medium</span></td></tr>
+        <tr><td><span class="badge badge-success">OS-88</span></td><td>Account search not working for some agencies</td><td><span class="badge badge-muted">Medium</span></td></tr>
+      </table>
+
+      <h3>High Priority — In Flight</h3>
+      <table>
+        <tr><th>Key</th><th>Summary</th><th>Status</th></tr>
+        <tr><td><span class="badge badge-warning">OS-277</span></td><td>Tasks disappear after triage intake</td><td><span class="badge badge-yellow">Selected</span></td></tr>
+        <tr><td><span class="badge badge-warning">OS-273</span></td><td>Lockdown PRD Resources</td><td><span class="badge badge-blue">In Progress</span></td></tr>
+        <tr><td><span class="badge badge-warning">OS-272</span></td><td>Set up release based on DEV</td><td><span class="badge badge-yellow">Selected</span></td></tr>
+        <tr><td><span class="badge badge-warning">OS-278</span></td><td>Account not found by AI triage logic</td><td><span class="badge badge-muted">Discovery</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h3>Jira Status Distribution (50 Issues)</h3>
+  <div class="bar-chart">
+    <div class="bar-row"><div class="bar-label">Backlog</div><div class="bar-track"><div class="bar-fill" style="width:22%;background:var(--disabled);">11</div></div></div>
+    <div class="bar-row"><div class="bar-label">Ready for QA</div><div class="bar-track"><div class="bar-fill" style="width:20%;background:var(--blue-green);">10</div></div></div>
+    <div class="bar-row"><div class="bar-label">Triage</div><div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--primary);">9</div></div></div>
+    <div class="bar-row"><div class="bar-label">In Progress</div><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--navy-bg);">5</div></div></div>
+    <div class="bar-row"><div class="bar-label">Selected for Dev</div><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--warning);">5</div></div></div>
+    <div class="bar-row"><div class="bar-label">Done</div><div class="bar-track"><div class="bar-fill" style="width:10%;background:var(--success);">5</div></div></div>
+    <div class="bar-row"><div class="bar-label">Code Review</div><div class="bar-track"><div class="bar-fill" style="width:6%;background:var(--beau-blue);">3</div></div></div>
+    <div class="bar-row"><div class="bar-label">Ready for Release</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--success);">1</div></div></div>
+    <div class="bar-row"><div class="bar-label">Discovery</div><div class="bar-track"><div class="bar-fill" style="width:2%;background:var(--disabled);">1</div></div></div>
+  </div>
+</div>
+
+<!-- GitHub Activity -->
+<div class="section">
+  <h2>GitHub Activity (covu-inc/covu-os)</h2>
+  <p style="font-size:13px;color:var(--disabled);margin-bottom:16px;">26 PRs active today — 7 merged, 14 open, 5 closed &middot; 16 commits to default branch</p>
+
+  <h3>Merged Today (7)</h3>
+  <div class="pr-grid">
+    <div class="pr-card merged">
+      <div class="pr-title">#2140 — Feature/system observability</div>
+      <div class="pr-meta">by <strong>toorajhelmi-bit</strong> &middot; merged 5:53 PM &middot; cohort review dashboard + deploy tooling</div>
+    </div>
+    <div class="pr-card merged">
+      <div class="pr-title">#2137 — Harden playbook import workflow</div>
+      <div class="pr-meta">by <strong>toorajhelmi-bit</strong> &middot; merged 4:29 PM</div>
+    </div>
+    <div class="pr-card merged">
+      <div class="pr-title">#2134 — OS-87 Add Internal Trigger as initiation channel</div>
+      <div class="pr-meta">by <strong>bibek-covu</strong> &middot; merged 4:10 PM</div>
+    </div>
+    <div class="pr-card merged">
+      <div class="pr-title">#2133 — OS-52 Editable Request Type on replan</div>
+      <div class="pr-meta">by <strong>bibek-covu</strong> &middot; merged 10:03 AM &middot; account type hints</div>
+    </div>
+    <div class="pr-card merged">
+      <div class="pr-title">#2131 — Sync Salesforce data to COVU OS (improved)</div>
+      <div class="pr-meta">by <strong>alenhusanovic-bit</strong> &middot; merged 4:20 PM</div>
+    </div>
+    <div class="pr-card merged">
+      <div class="pr-title">#2130 — Sync Salesforce data to COVU OS (scripts)</div>
+      <div class="pr-meta">by <strong>alenhusanovic-bit</strong> &middot; merged 2:54 PM</div>
+    </div>
+    <div class="pr-card merged">
+      <div class="pr-title">#2111 — Bulk note sync with attachment support</div>
+      <div class="pr-meta">by <strong>alenhusanovic-bit</strong> &middot; merged 8:02 AM &middot; performance improvements</div>
+    </div>
+  </div>
+
+  <h3>Key Open PRs (14 active)</h3>
+  <div class="pr-grid">
+    <div class="pr-card open">
+      <div class="pr-title">#2141 — Merge release/mvp 1.0.40 into main</div>
+      <div class="pr-meta">by <strong>josephrifkin-png</strong> &middot; release integration</div>
+    </div>
+    <div class="pr-card open">
+      <div class="pr-title">#2139 — Global assignment optimization</div>
+      <div class="pr-meta">by <strong>szargarzadeh</strong> &middot; rewriting without scipy/numpy</div>
+    </div>
+    <div class="pr-card open">
+      <div class="pr-title">#2138 — OS-52 Auto-select Request Type from policy</div>
+      <div class="pr-meta">by <strong>bibek-covu</strong> &middot; RPC + mandatory field + UI order</div>
+    </div>
+    <div class="pr-card open">
+      <div class="pr-title">#2136 — OS-269 Remove kind/archived flags from user_profile</div>
+      <div class="pr-meta">by <strong>josephrifkin-png</strong></div>
+    </div>
+    <div class="pr-card open">
+      <div class="pr-title">#2135 — OS-29 Update metadata audit triggers</div>
+      <div class="pr-meta">by <strong>bibek-covu</strong> &middot; column-aware set_audit_fields</div>
+    </div>
+    <div class="pr-card open">
+      <div class="pr-title">#2132 — AWS Lambda API stability check scripts</div>
+      <div class="pr-meta">by <strong>alenhusanovic-bit</strong></div>
+    </div>
+  </div>
+
+  <h3>Active Contributors</h3>
+  <div class="contributor-row">
+    <div class="contributor">
+      <div><div class="name">Joseph Rifkin</div><div class="stats">10 PRs &middot; release merges, permission fixes, policy detail UI</div></div>
+    </div>
+    <div class="contributor">
+      <div><div class="name">Bibek Khatri</div><div class="stats">7 PRs, 2 merged &middot; replan features, initiation channels, audit</div></div>
+    </div>
+    <div class="contributor">
+      <div><div class="name">Tooraj Helmi</div><div class="stats">2 PRs merged &middot; observability dashboards, playbook hardening</div></div>
+    </div>
+    <div class="contributor">
+      <div><div class="name">Alen Husanovic</div><div class="stats">5 PRs, 3 merged &middot; Salesforce sync, API monitoring</div></div>
+    </div>
+    <div class="contributor">
+      <div><div class="name">Sahar Zargarzadeh</div><div class="stats">2 PRs open &middot; global assignment optimization</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Key Takeaways -->
+<div class="section">
+  <h2>Key Takeaways & Action Items</h2>
+  <ul>
+    <li><strong>Top user pain point:</strong> Page auto-refresh during email composition — multiple agents affected, severely impacts productivity. <span class="badge badge-blue">OS-276</span> (Remove Work Page Auto-Refresh) is in Backlog — should be escalated.</li>
+    <li><strong>Critical bug — Tasks vanishing post-triage:</strong> 3+ agents reported tasks disappearing after triage while on live calls. <span class="badge badge-warning">OS-277</span> is Selected for Development — high urgency.</li>
+    <li><strong>Availability flipping:</strong> Agents being set offline unexpectedly, losing active tasks. OS-107 (Agent OFFLINE after refresh) was fixed today — monitor if this resolves the reports.</li>
+    <li><strong>Misassigned tasks dominate blocks:</strong> 64% of all blocks are wrong agent/team assignments — task routing algorithm needs tuning. Common patterns: CL↔PL team confusion, COI delivery tasks to wrong agents, direct-billed policies needing no action.</li>
+    <li><strong>Release 1.0.40 progressing:</strong> 10 items moved to Ready for QA. Includes key features: touch-tone support, dashboard migration, SF S3 file downloads, and AI triage improvements. Release PR #2141 is open.</li>
+    <li><strong>Strong engineering output:</strong> 7 PRs merged, 16 commits to main, 5 active contributors. Observability dashboards and Salesforce data sync were major deliverables.</li>
+    <li><strong>2 highest-priority bugs resolved:</strong> OS-86 (Email AI triage reopening) and OS-107 (Agent offline on refresh) both marked Done.</li>
+  </ul>
+</div>
+
+<div class="footer">
+  <span class="covu">COVU</span> OS Daily Digest — Generated on Monday, April 6, 2026 at 11:59 PM PT<br>
+  Data sources: Supabase (task metrics) · Jira (engineering) · Slack #covu-os-support (user reports) · GitHub covu-inc/covu-os (PRs & commits)
+</div>
+
+</div>
+</body>
+</html>

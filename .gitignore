@@ -1,0 +1,9 @@
+# Ignore everything
+*
+
+# Except the reports folder and its HTML files
+!reports/
+!reports/**/*.html
+
+# And the gitignore itself
+!.gitignore
