@@ -511,21 +511,21 @@
           <div class="metric-value">4.1<span class="metric-unit"> min</span></div>
           <div class="metric-label" style="margin-top:5px">Median Handle Time</div>
           <div class="metric-delta delta-good">↓ 19% from 5.1 min at launch</div>
-          <div class="metric-note">Median time a human agent spends actively working a task (IN_PROGRESS + BLOCKED), AI agents excluded.</div>
+          <div class="metric-note">Median active time per task from task_status_history (IN_PROGRESS + BLOCKED), COVU Agent role only. Sessions capped at 60 min.</div>
         </div>
 
         <div class="metric-card" style="grid-row: span 1;">
-          <div class="metric-value">17<span class="metric-unit">K</span></div>
-          <div class="metric-label" style="margin-top:5px">Tasks / Week</div>
-          <div class="metric-delta delta-good">↑ 2× from 8K at launch</div>
-          <div class="metric-note">Tasks completed (DONE) last full week. Volume has doubled as agencies ramp onto the platform.</div>
+          <div class="metric-value">9.2<span class="metric-unit">K</span></div>
+          <div class="metric-label" style="margin-top:5px">AI-Closed Tasks / Week <span style="background:rgba(255,183,3,0.2);color:#a07400;font-size:0.58rem;font-weight:800;padding:1px 6px;border-radius:8px;letter-spacing:0.04em;vertical-align:middle">AI</span></div>
+          <div class="metric-delta delta-good">↑ 94% from ~4.7K at launch</div>
+          <div class="metric-note">Tasks completed with zero human agent touch — fully AI-closed. ~52% of all completed tasks this week (Apr 13–18).</div>
         </div>
 
         <div class="metric-card">
-          <div class="metric-value">~$3.80</div>
+          <div class="metric-value">~$4.30</div>
           <div class="metric-label" style="margin-top:5px">Cost per Task</div>
-          <div class="metric-delta delta-good">↓ 37% from ~$6.00</div>
-          <div class="metric-note">Human agent labor cost per task touched. Based on agent hours worked vs. tasks processed.</div>
+          <div class="metric-delta delta-good">↓ 35% from ~$6.60 at launch</div>
+          <div class="metric-note">Avg agent handle time (10.8 min, from task_status_history) × $24/hr loaded rate. Excludes AI-only tasks.</div>
         </div>
 
       </div>
@@ -695,7 +695,10 @@
       <div class="section-toggle">▼</div>
     </div>
     <div class="section-body">
-      <div class="shipped-grid">
+
+      <!-- March -->
+      <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:24px;height:2px;background:var(--stroke)"></span>March — Foundation</div>
+      <div class="shipped-grid" style="margin-bottom:24px">
 
         <div class="shipped-item">
           <div class="shipped-icon">🛡️</div>
@@ -709,7 +712,7 @@
           <div class="shipped-icon">🤖</div>
           <div>
             <div class="shipped-title">AI Triage Improvements</div>
-            <div class="shipped-desc">Triage Intake AI refined for better intent classification. Emails that fail auto-triage now surface in a managed queue — no silent drop-off. Reduced failure rate from its launch-week peak. Currently at 98% automatic routing success.</div>
+            <div class="shipped-desc">Triage Intake AI refined for better intent classification. Emails that fail auto-triage now surface in a managed queue — no silent drop-off. Currently at 98% automatic routing success.</div>
           </div>
         </div>
 
@@ -724,8 +727,8 @@
         <div class="shipped-item clickable" onclick="openModal('obs-modal')">
           <div class="shipped-icon">📊</div>
           <div>
-            <div class="shipped-title">System Observability Dashboard <span class="view-badge">View →</span></div>
-            <div class="shipped-desc">Real-time visibility into task flow — AI funnel conversion, hand raise patterns, channel and delay breakdowns. This is the instrumentation that lets the team drive metrics down systematically.</div>
+            <div class="shipped-title">System Observability for Admins <span class="view-badge">View →</span></div>
+            <div class="shipped-desc">Real-time visibility into task flow — AI funnel conversion, hand raise patterns, channel and delay breakdowns. The instrumentation that lets the team drive metrics down systematically.</div>
           </div>
         </div>
 
@@ -733,23 +736,29 @@
           <div class="shipped-icon">🔀</div>
           <div>
             <div class="shipped-title">CL / PL Task Segregation</div>
-            <div class="shipped-desc">Commercial and personal lines tasks now route to separate queues. Agents only see work matching their specialization — a key stepping stone toward full skill-based routing.</div>
+            <div class="shipped-desc">Commercial and personal lines tasks now route to separate queues. Agents only see work matching their specialization — a stepping stone toward full skill-based routing.</div>
           </div>
         </div>
 
         <div class="shipped-item clickable" onclick="openModal('coi-modal')">
           <div class="shipped-icon">📄</div>
           <div>
-            <div class="shipped-title">COI Generation API — Complete <span class="view-badge">View →</span></div>
-            <div class="shipped-desc">COI API complete across all major policy types (CGL, BOP, Business Auto, Package, Workers Comp) with multi-policy support. OS task flow UX in UAT — targeting mid-May launch.</div>
+            <div class="shipped-title">COI Generation API <span class="view-badge">View →</span></div>
+            <div class="shipped-desc">COI API complete across all major policy types (CGL, BOP, Business Auto, Package, Workers Comp) with multi-policy support. OS task flow UX now in UAT — targeting mid-May launch.</div>
           </div>
         </div>
 
+      </div>
+
+      <!-- April -->
+      <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:24px;height:2px;background:var(--stroke)"></span>April — Shipping Against Plan</div>
+      <div class="shipped-grid">
+
         <div class="shipped-item">
-          <div class="shipped-icon">📞</div>
+          <div class="shipped-icon">🧠</div>
           <div>
-            <div class="shipped-title">Call Transfer — Complete</div>
-            <div class="shipped-desc">End-to-end call transfer flow shipped — agents can now transfer live calls directly from the OS execute tab. Includes observability for transfer events and new call metrics in the KPI dashboard.</div>
+            <div class="shipped-title">Triage AI: Deduplication + Auto-close</div>
+            <div class="shipped-desc">AI now detects and merges duplicate service requests, and auto-closes tasks it can resolve without agent input. Directly reduces noise in agent queues and increases the AI-only closure rate.</div>
           </div>
         </div>
 
@@ -757,7 +766,23 @@
           <div class="shipped-icon">🔁</div>
           <div>
             <div class="shipped-title">Salesforce Migration — Complete</div>
-            <div class="shipped-desc">Full SF→OS data migration complete: cases, emails, notes, attachments, and account history. Agents now have complete historical context inside OS, eliminating the need to switch to Salesforce for lookups.</div>
+            <div class="shipped-desc">Full SF→OS migration: cases, emails, notes, attachments, and account history. Agents now have complete historical context inside OS — no more switching to Salesforce for lookups.</div>
+          </div>
+        </div>
+
+        <div class="shipped-item">
+          <div class="shipped-icon">🗂️</div>
+          <div>
+            <div class="shipped-title">Improved Context around Customers</div>
+            <div class="shipped-desc">Agents now see richer account and service history on every task — prior interactions, open services, and policy context surface automatically. Reduces the time spent hunting for context before acting.</div>
+          </div>
+        </div>
+
+        <div class="shipped-item">
+          <div class="shipped-icon">📞</div>
+          <div>
+            <div class="shipped-title">Call Transfer — Complete</div>
+            <div class="shipped-desc">End-to-end call transfer flow shipped — agents can transfer live calls directly from the OS execute tab. Includes observability for transfer events and new call metrics in the KPI dashboard.</div>
           </div>
         </div>
 
@@ -765,7 +790,7 @@
           <div class="shipped-icon">🔧</div>
           <div>
             <div class="shipped-title">Platform Hardening — Round 2</div>
-            <div class="shipped-desc">14 additional production issues resolved since April 13: calls not captured (OS-261), task workflow corruption (OS-256), live-call routing bugs (OS-277, OS-487), attachment download session loss (OS-502), auto-assign 503 bottleneck (OS-125), and more. System stability now at its highest point.</div>
+            <div class="shipped-desc">14 production issues resolved: calls not captured (OS-261), task workflow corruption (OS-256), live-call routing bugs (OS-277, OS-487), attachment download session loss (OS-502), auto-assign 503 bottleneck (OS-125). System stability at highest point yet.</div>
           </div>
         </div>
 
@@ -773,7 +798,7 @@
           <div class="shipped-icon">✉️</div>
           <div>
             <div class="shipped-title">Email → Task Association</div>
-            <div class="shipped-desc">Emails are now linked directly to the tasks they spawned. Agents have full thread context alongside their task, reducing the need to search for context manually. Includes backfill of existing open services.</div>
+            <div class="shipped-desc">Emails are now linked directly to the tasks they spawned, with full thread context alongside the task. Includes backfill of existing open services and forwarding capability for agent hand-off.</div>
           </div>
         </div>
 
@@ -788,54 +813,100 @@
         <div class="section-icon">🗺️</div>
         <div>
           <div class="section-title-text">What's Next</div>
-          <div class="section-subtitle">Q2 2026 roadmap — in priority order</div>
+          <div class="section-subtitle">Q2 2026 — active work and upcoming releases</div>
         </div>
       </div>
       <div class="section-toggle">▼</div>
     </div>
     <div class="section-body">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
 
-        <div style="background:var(--light-bg);border-radius:12px;padding:18px 20px;border-top:3px solid var(--primary)">
-          <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--primary);margin-bottom:8px">Smarter Operations</div>
-          <div style="font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4">Route the right task to the right agent, with full account and policy context in view.</div>
-          <ul style="margin:0;padding-left:16px;display:flex;flex-direction:column;gap:5px">
-            <li style="font-size:0.74rem;color:#4a5568">Next Best Task Router v1</li>
-            <li style="font-size:0.74rem;color:#4a5568">Manage Companies &amp; Policies in OS</li>
-            <li style="font-size:0.74rem;color:#4a5568">Connect Read APIs for Account &amp; Policy</li>
-            <li style="font-size:0.74rem;color:#4a5568">Proactive Triggers in Playbooks</li>
-          </ul>
+      <!-- IN PROGRESS — April targets -->
+      <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:24px;height:2px;background:var(--primary)"></span>Active — targeting end of April</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px">
+
+        <div style="background:var(--light-bg);border-radius:12px;padding:16px 18px;border-left:3px solid var(--primary)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;background:rgba(255,183,3,0.18);color:#a07400;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px">In Progress</div>
+          <div style="font-size:0.84rem;font-weight:700;color:var(--navy);margin-bottom:5px">Next Best Task Router v1</div>
+          <div style="font-size:0.74rem;color:#4a5568;line-height:1.5">Scores and surfaces the highest-priority task for each agent at the moment they're available. Direct fix for the 61% of hand raises caused by wrong-agent routing.</div>
         </div>
 
-        <div style="background:var(--light-bg);border-radius:12px;padding:18px 20px;border-top:3px solid var(--primary)">
-          <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--primary);margin-bottom:8px">Complete the Service Loop</div>
-          <div style="font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4">Handle every inbound channel and automate high-volume service tasks end to end.</div>
-          <ul style="margin:0;padding-left:16px;display:flex;flex-direction:column;gap:5px">
-            <li style="font-size:0.74rem;color:#4a5568">COI Generation <span style="background:rgba(255,183,3,0.2);color:#a07400;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px">UAT</span></li>
-            <li style="font-size:0.74rem;color:#4a5568">Handle Voicemails</li>
-            <li style="font-size:0.74rem;text-decoration:line-through;color:#9aa5b4">Enhance Call Transfer Flow <span style="background:rgba(7,217,118,0.15);color:#059a52;font-size:0.6rem;font-weight:700;padding:1px 6px;border-radius:8px;margin-left:4px;text-decoration:none">✓ Done</span></li>
-          </ul>
+        <div style="background:var(--light-bg);border-radius:12px;padding:16px 18px;border-left:3px solid var(--primary)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;background:rgba(255,183,3,0.18);color:#a07400;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px">In Progress</div>
+          <div style="font-size:0.84rem;font-weight:700;color:var(--navy);margin-bottom:5px">Manage Companies &amp; Policies in OS</div>
+          <div style="font-size:0.74rem;color:#4a5568;line-height:1.5">Agents view and navigate policy/account data directly inside OS — no more switching to Epic or external systems to look up coverage details mid-task.</div>
         </div>
 
-        <div style="background:var(--light-bg);border-radius:12px;padding:18px 20px;border-top:3px solid #6b7a99">
-          <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:#6b7a99;margin-bottom:8px">Visibility & Control</div>
-          <div style="font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4">Give managers and the platform the oversight needed to operate at scale.</div>
-          <ul style="margin:0;padding-left:16px;display:flex;flex-direction:column;gap:5px">
-            <li style="font-size:0.74rem;color:#4a5568">Manager Visibility &amp; Control</li>
-            <li style="font-size:0.74rem;color:#4a5568">Agent Activity &amp; Behavior Instrumentation</li>
-            <li style="font-size:0.74rem;color:#4a5568">AI QC &amp; Agent Performance Framework</li>
-            <li style="font-size:0.74rem;color:#4a5568">Instructions Management</li>
-          </ul>
+        <div style="background:var(--light-bg);border-radius:12px;padding:16px 18px;border-left:3px solid var(--primary)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;background:rgba(255,183,3,0.18);color:#a07400;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px">In Progress</div>
+          <div style="font-size:0.84rem;font-weight:700;color:var(--navy);margin-bottom:5px">Improved Visibility for Managers</div>
+          <div style="font-size:0.74rem;color:#4a5568;line-height:1.5">Ops managers get a live view of agent activity, queue depth, and service-level progress. The control plane needed to manage teams at scale.</div>
         </div>
 
-        <div style="background:var(--light-bg);border-radius:12px;padding:18px 20px;border-top:3px solid #6b7a99">
-          <div style="font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:#6b7a99;margin-bottom:8px">Platform & Experience</div>
-          <div style="font-size:0.82rem;font-weight:600;color:var(--navy);margin-bottom:10px;line-height:1.4">Harden the foundation and improve the day-to-day experience for agents and builders.</div>
-          <ul style="margin:0;padding-left:16px;display:flex;flex-direction:column;gap:5px">
-            <li style="font-size:0.74rem;color:#4a5568">Harden COVU OS (Top NFRs)</li>
-            <li style="font-size:0.74rem;color:#4a5568">Agent UX Quick Wins &amp; Design</li>
-            <li style="font-size:0.74rem;color:#4a5568">Playbook Studio: Condition Blocks</li>
-          </ul>
+        <div style="background:var(--light-bg);border-radius:12px;padding:16px 18px;border-left:3px solid var(--primary)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;background:rgba(255,183,3,0.18);color:#a07400;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px">In Progress</div>
+          <div style="font-size:0.84rem;font-weight:700;color:var(--navy);margin-bottom:5px">Improve Follow-up Process</div>
+          <div style="font-size:0.74rem;color:#4a5568;line-height:1.5">Structured handling for follow-up emails and service re-opens. Closes the loop on a common source of duplicate or missed services — previously a manual agent judgment call.</div>
+        </div>
+
+      </div>
+
+      <!-- MAY RELEASES -->
+      <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:24px;height:2px;background:var(--stroke)"></span>Targeting May</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px">
+
+        <div style="background:var(--light-bg);border-radius:10px;padding:14px 16px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Generate COI in OS</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Full task flow UI for COI requests — currently in UAT. API complete, OS workflow mid-May.</div>
+          <div style="margin-top:6px"><span style="font-size:0.58rem;font-weight:800;background:rgba(255,183,3,0.18);color:#a07400;padding:1px 7px;border-radius:8px">UAT</span></div>
+        </div>
+
+        <div style="background:var(--light-bg);border-radius:10px;padding:14px 16px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Handle Voicemails</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Voicemails transcribed, classified, and surfaced as tasks — completing the inbound channel coverage.</div>
+        </div>
+
+        <div style="background:var(--light-bg);border-radius:10px;padding:14px 16px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Live Operations Quick Wins</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Service flow improvements and agent roster controls surfaced from direct agency feedback. Ship fast, iterate often.</div>
+        </div>
+
+        <div style="background:var(--light-bg);border-radius:10px;padding:14px 16px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Agent Activity Instrumentation</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Detailed per-agent and per-task telemetry — the data layer needed for AI QC and performance scoring.</div>
+        </div>
+
+        <div style="background:var(--light-bg);border-radius:10px;padding:14px 16px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Connect Read APIs</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Connect API layer for account and policy data — enables proactive triggers, deeper context, and external integrations.</div>
+        </div>
+
+        <div style="background:var(--light-bg);border-radius:10px;padding:14px 16px">
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Instructions Management in OS</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Agency-level instructions and overrides managed inside OS — no code changes needed for policy or routing rule updates.</div>
+        </div>
+
+      </div>
+
+      <!-- NFRs & ONGOING -->
+      <div style="font-size:0.68rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:10px"><span style="display:inline-block;width:24px;height:2px;background:var(--stroke)"></span>Continuous — running every sprint</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+
+        <div style="background:rgba(176,0,32,0.05);border-radius:10px;padding:14px 16px;border-top:2px solid rgba(176,0,32,0.25)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#8B0000;margin-bottom:5px">NFRs &amp; Hardening</div>
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Harden COVU OS</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Top NFRs — security, performance, reliability — tracked against the Q2 list. SOC2 prep running in parallel targeting 95% readiness. <strong>Estimated ~20–25% of sprint capacity.</strong></div>
+        </div>
+
+        <div style="background:rgba(255,147,79,0.07);border-radius:10px;padding:14px 16px;border-top:2px solid rgba(255,147,79,0.3)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#c4631a;margin-bottom:5px">Feedback-Driven</div>
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Ad-hoc &amp; Agency Requests</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Every sprint includes bug fixes, agent UX tweaks, and operational requests from live agencies. This isn't overhead — it's how we earn trust and keep teams on the platform. <strong>~20% of sprint capacity.</strong></div>
+        </div>
+
+        <div style="background:rgba(28,41,69,0.04);border-radius:10px;padding:14px 16px;border-top:2px solid rgba(28,41,69,0.15)">
+          <div style="font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:0.07em;color:#6b7a99;margin-bottom:5px">R&amp;D</div>
+          <div style="font-size:0.74rem;font-weight:700;color:var(--navy);margin-bottom:4px">Computer-Use Agent &amp; BEX</div>
+          <div style="font-size:0.7rem;color:#4a5568;line-height:1.45">Computer-Use Agent automates policy downloads from carrier portals. BEX adds Deep Copy &amp; Paste, Vero Chat, and Agent Activity Tracking. Parallel track — no impact on committed items.</div>
         </div>
 
       </div>
