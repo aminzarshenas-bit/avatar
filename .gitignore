@@ -10,5 +10,8 @@
 # Board/TGV update reports in root
 !os-update-apr2026.html
 
+# Agent availability dashboard
+!avail-dashboard.html
+
 # And the gitignore itself
 !.gitignore
