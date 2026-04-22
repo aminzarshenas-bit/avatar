@@ -48,7 +48,45 @@ main { padding: 22px 32px 60px; max-width: 1400px; margin: 0 auto; }
 .stat-chip .sub-stat { display: flex; flex-direction: column; gap: 1px; }
 .stat-chip .sub-stat .sv { font-size: 13px; font-weight: 700; color: var(--navy); }
 .stat-chip .sub-stat .sl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--offline-dark); }
-#aggChart { width: 100%; height: 180px; display: block; cursor: crosshair; }
+.stat-lbl-row { display: flex; align-items: center; gap: 5px; }
+.info-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--stroke); color: var(--offline-dark);
+  font-size: 8px; font-weight: 800; cursor: default;
+  flex-shrink: 0; position: relative;
+}
+.info-icon:hover .info-tip {
+  display: block;
+}
+.info-tip {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--navy);
+  color: #fff;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 7px;
+  white-space: nowrap;
+  z-index: 300;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  pointer-events: none;
+}
+.info-tip::after {
+  content: '';
+  position: absolute;
+  top: 100%; left: 50%; transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--navy);
+}
+.chart-wrap { position: relative; width: 100%; height: 180px; }
+#aggChart { position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: crosshair; }
+#aggOverlay { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; }
 .chart-legend { display: flex; align-items: center; gap: 16px; margin-top: 10px; font-size: 11px; color: var(--offline-dark); font-weight: 600; }
 .legend-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 4px; }
 
@@ -132,11 +170,17 @@ main { padding: 22px 32px 60px; max-width: 1400px; margin: 0 auto; }
       </div>
       <div class="stat-chip">
         <span class="val" id="statAvg">—</span>
-        <span class="lbl">Avg Available (5a–5p PDT)</span>
+        <div class="stat-lbl-row">
+          <span class="lbl">Avg Available</span>
+          <span class="info-icon">i<span class="info-tip">Average # of agents available<br>per 5-min bucket, 5am–5pm PDT</span></span>
+        </div>
       </div>
       <div class="stat-chip" style="min-width:180px">
         <span class="val" id="statAvgHrs">—</span>
-        <span class="lbl">Avg Hrs Available / Agent</span>
+        <div class="stat-lbl-row">
+          <span class="lbl">Avg Hrs / Agent</span>
+          <span class="info-icon">i<span class="info-tip">Hours each agent was available<br>between 5am–5pm PDT only</span></span>
+        </div>
         <div class="sub-stats">
           <div class="sub-stat"><span class="sv" id="statMedian">—</span><span class="sl">Median</span></div>
           <div class="sub-stat"><span class="sv" id="statMin">—</span><span class="sl">Min</span></div>
@@ -144,7 +188,10 @@ main { padding: 22px 32px 60px; max-width: 1400px; margin: 0 auto; }
         </div>
       </div>
     </div>
-    <canvas id="aggChart"></canvas>
+    <div class="chart-wrap">
+      <canvas id="aggChart"></canvas>
+      <canvas id="aggOverlay"></canvas>
+    </div>
     <div class="chart-legend">
       <span><span class="legend-dot" style="background:var(--success)"></span>Available agents (count) · PDT · hover for details</span>
     </div>
@@ -274,7 +321,7 @@ function drawAgg(agg){
     ctx.strokeStyle='#D3DBEE';ctx.lineWidth=1;
     ctx.beginPath();ctx.moveTo(x,PT+cH);ctx.lineTo(x,PT+cH+4);ctx.stroke();
   }
-  canvas._agg=agg;canvas._PL=PL;canvas._bW=bW;canvas._cH=cH;canvas._PT=PT;
+  canvas._agg=agg;canvas._PL=PL;canvas._bW=bW;canvas._cH=cH;canvas._PT=PT;canvas._maxV=maxV;
 }
 
 function renderAgentList(filter){
@@ -328,16 +375,44 @@ function buildRuler(){
 }
 
 const tooltip=document.getElementById('tooltip');
+
+function drawOverlay(canvas,b){
+  const W=canvas.offsetWidth,H=canvas.offsetHeight;
+  canvas.width=W*devicePixelRatio;canvas.height=H*devicePixelRatio;
+  const ctx=canvas.getContext('2d');
+  ctx.scale(devicePixelRatio,devicePixelRatio);
+  const chart=document.getElementById('aggChart');
+  const {_PL:PL,_bW:bW,_PT:PT,_cH:cH,_agg:agg,_maxV:maxV}=chart;
+  if(!agg)return;
+  const x=PL+(b+0.5)*bW;
+  const y=PT+cH-(agg[b]/maxV)*cH;
+  // vertical line
+  ctx.strokeStyle='rgba(28,41,69,0.25)';ctx.lineWidth=1;ctx.setLineDash([4,3]);
+  ctx.beginPath();ctx.moveTo(x,PT);ctx.lineTo(x,PT+cH);ctx.stroke();
+  ctx.setLineDash([]);
+  // dot on curve
+  ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+  ctx.fillStyle='#07D976';ctx.fill();
+  ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();
+}
+
+function clearOverlay(){
+  const ov=document.getElementById('aggOverlay');
+  const ctx=ov.getContext('2d');
+  ctx.clearRect(0,0,ov.width,ov.height);
+}
+
 document.getElementById('aggChart').addEventListener('mousemove',function(e){
   if(!this._agg)return;
   const rect=this.getBoundingClientRect();
   const b=Math.round((e.clientX-rect.left-this._PL)/this._bW);
-  if(b<0||b>=288){tooltip.style.display='none';return;}
+  if(b<0||b>=288){tooltip.style.display='none';clearOverlay();return;}
+  drawOverlay(document.getElementById('aggOverlay'),b);
   tooltip.textContent=fmt(b*5)+' – '+fmt(Math.min(b*5+5,1440))+' PDT · '+this._agg[b]+' available';
   tooltip.style.display='block';
   tooltip.style.left=(e.clientX+14)+'px';tooltip.style.top=(e.clientY-32)+'px';
 });
-document.getElementById('aggChart').addEventListener('mouseleave',()=>tooltip.style.display='none');
+document.getElementById('aggChart').addEventListener('mouseleave',()=>{tooltip.style.display='none';clearOverlay();});
 
 document.getElementById('agentList').addEventListener('mousemove',function(e){
   const svg=e.target.closest('svg[data-uid]');
@@ -368,10 +443,10 @@ function render(day){
   const workBuckets=Array.from(currentAgg).slice(60,204); // 05:00–17:00 PDT
   const avgAvail=workBuckets.reduce((s,v)=>s+v,0)/workBuckets.length;
 
-  // per-agent hours (only agents with data)
+  // per-agent hours scoped to 5am–5pm PDT (buckets 60–203)
   const agentMins=currentTimelines
     .filter(t=>t.tl)
-    .map(t=>Array.from(t.tl).filter(v=>v).length*5)
+    .map(t=>Array.from(t.tl).slice(60,204).filter(v=>v).length*5)
     .filter(m=>m>0)
     .sort((a,b)=>a-b);
 
