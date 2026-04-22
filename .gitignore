@@ -7,5 +7,8 @@
 !random/
 !random/**/*.html
 
+# Board/TGV update reports in root
+!os-update-apr2026.html
+
 # And the gitignore itself
 !.gitignore
