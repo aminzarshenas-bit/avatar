@@ -132,7 +132,7 @@ main { padding: 22px 32px 60px; max-width: 1400px; margin: 0 auto; }
       </div>
       <div class="stat-chip">
         <span class="val" id="statAvg">—</span>
-        <span class="lbl">Avg Available</span>
+        <span class="lbl">Avg Available (5a–5p PDT)</span>
       </div>
       <div class="stat-chip" style="min-width:180px">
         <span class="val" id="statAvgHrs">—</span>
@@ -363,10 +363,10 @@ function render(day){
   currentTimelines=AGENTS.map(a=>({uid:a.uid,tl:buildTimeline(a.uid,day)}));
   currentAgg=buildAgg(currentTimelines);
 
-  // peak & avg available (across non-zero buckets)
+  // peak (all day) & avg available (5am–5pm PDT only, buckets 60–203)
   const peak=Math.max(...currentAgg,0);
-  const nzBuckets=Array.from(currentAgg).filter(v=>v>0);
-  const avgAvail=nzBuckets.length?nzBuckets.reduce((s,v)=>s+v,0)/nzBuckets.length:0;
+  const workBuckets=Array.from(currentAgg).slice(60,204); // 05:00–17:00 PDT
+  const avgAvail=workBuckets.reduce((s,v)=>s+v,0)/workBuckets.length;
 
   // per-agent hours (only agents with data)
   const agentMins=currentTimelines
